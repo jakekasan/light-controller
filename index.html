@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+
+<title>
+  This is a title.
+</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+var newPoint = function(point){
+  console.console.log("New point was submitted");
+};
+
+$(document).ready(function(){
+  $("p").click(function(){
+    console.log("click!!!");
+    newPoint("hello");
+  });
+});
+
+</script>
+<head>
+  This is the head of the text.
+</head>
+
+<body>
+  <p>
+  This is some text.
+  </p>
+  <p2>
+    This is slightly smaller text.
+  </p2>
+  <div id="special">
+    This is the special div.
+  </div>
+
+
+</body>
+
+</html>
