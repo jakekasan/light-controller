@@ -7,18 +7,39 @@
 </title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
-var newPoint = function(point){
-  console.console.log("New point was submitted");
+
+var dataPoints = [];
+
+
+
+var newPoint = function(x,y){
+  console.log("Mouse X: ",x,"\tMouse Y: ",y);
+  if (dataPoints.length > 5) 
 };
 
 $(document).ready(function(){
-  $("p").click(function(){
-    console.log("click!!!");
-    newPoint("hello");
+  $(".graph").click(function(){
+    var x = event.clientX;
+    var y = event.clientY;
+    newPoint(x,y);
   });
 });
 
 </script>
+
+<style>
+
+.graph {
+  background-color: Tomato;
+  color: Blue;
+  height: 200px;
+  width: 300px;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+</style>
+
 <head>
   This is the head of the text.
 </head>
@@ -32,6 +53,9 @@ $(document).ready(function(){
   </p2>
   <div id="special">
     This is the special div.
+  </div>
+  <div class="graph">
+
   </div>
 
 
