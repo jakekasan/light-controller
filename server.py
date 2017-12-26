@@ -19,28 +19,24 @@ s.listen(10)
 
 def read_file(path):
     myfile = list(csv.reader(open(path,'r')))
-    ldict = {}
+    points = []
     for i in myfile:
-        ldict[i[0]] = i[1]
-    return(ldict)
+        temp = {}
+        temp["env_brightness"] = i[0]
+        temp["led_brightness"] = i[1]
+        points.append(temp)
+    return(points)
 
 while 1:
     clt_conn, clt_addr = s.accept()
     request = clt_conn.recv(1024)
 
-    #print(clt_addr)
-
-    #clt_addr_h = clt_addr[0] + ':' + str(clt_addr[1])
-
-    #print(clt_addr_h)
+    print("Client connected!")
 
     response_data = 'HTTP/1.1 200 OK \n\n' + str(read_file('data.csv'))
 
     mod_res = response_data.encode('utf-8')
 
-    #print(json.loads(request))
-    #jresponse = json.loads(request.decode('utf-8'))
     clt_conn.sendall(mod_res)
     clt_conn.close()
-
-    #r = requests.post(clt_addr_h,json=response_data)
+    print("Client served and disconnected!")
