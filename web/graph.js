@@ -19,7 +19,7 @@ function mousePressed() {
   GLOBAL_taggedPoint = findClosestPoint(mouse_point,GLOBAL_data);
   if (euclDistance(GLOBAL_taggedPoint,mouse_point) < map(20,0,height,0,1)) {
     GLOBAL_tagged = true;
-    console.log("Tagged");
+    //console.log("Tagged");
     return(GLOBAL_taggedPoint);
   }
 }

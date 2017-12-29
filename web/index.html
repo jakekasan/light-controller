@@ -8,6 +8,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
 <script src="graph.js"></script>
+<script src="files.js"></script>
 <script>
 
 var GLOBAL_response;
@@ -63,19 +64,15 @@ var sendNewData = function(data){
               "led_brightness":data[i].y
             };
     temporary.push(datavalue);
-
   }
-  var request = new XMLHttpRequest();
-  request.open('POST','http://localhost:8000',true);
-  request.setRequestHeader('Content-type',"application/json");
-  request.send(JSON.stringify(temporary));
-  console.log(JSON.stringify(temporary));
 }
 
 window.setInterval(function(){
+  if (GLOBAL_data.length > 0) {
+    fileWriter("meh",GLOBAL_data);
+  }
   fileReader('we');
   console.log(GLOBAL_data);
-  fileWriter("meh",GLOBAL_data);
   //client.get("http://localhost:8000");
   //console.log(client.responseXML);
   //console.log("Data",JSON.stringify(temp.response));
@@ -94,6 +91,8 @@ window.setInterval(function(){
   //   }
   //   GLOBAL_updating = false;
   // }
+  //dataToJSON(GLOBAL_data);
+  sendToServer('http:/localhost:8000',dataToJSON(GLOBAL_data));
 
 },10000);
 
