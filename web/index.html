@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html>
+
+<title>
+  This is a title.
+</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
+<script src="graph.js"></script>
+<script>
+
+var GLOBAL_response;
+var HttpClient = function() {
+  this.get = function(aUrl){
+    var anHttpRequest = new XMLHttpRequest();
+    anHttpRequest.onreadystatechange = function() {
+      if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+          //console.log("Response Text",anHttpRequest.responseText);
+          GLOBAL_response = anHttpRequest.responseText;
+          return(anHttpRequest.responseText);
+    }
+
+    anHttpRequest.open( "GET",aUrl, true );
+    anHttpRequest.send( null );
+  }
+}
+
+
+var tempJson = {"points": [{"env_brightness":1700,"led_brightness":100},{"env_brightness":800,"led_brightness":80},{"env_brightness":100,"led_brightness":10}]};
+
+var client = new HttpClient();
+// client.get("http://localhost:8000", function(response) {
+//   console.log();
+// });
+
+var populateData = function(addr,data){
+  //var mydata = [];
+  var mydata = client.get(addr);
+  //console.log(mydata);
+  return(mydata);
+};
+
+var customParse = function (mystring){
+  var newString = "";
+  for (var i = 0; i < mystring.length; i++) {
+    //console.log(mystring[i]=="'");
+    if (mystring[i]=="'") {
+      newString = newString.concat("\"");
+    } else {
+      newString = newString.concat(mystring[i]);
+    }
+  }
+  return(newString);
+}
+
+var sendNewData = function(data){
+  //first, convert GLOBAL_data to JSON
+  var temporary = [];
+  for (var i = 0; i < data.length; i++) {
+    datavalue = {
+              "env_brightness":data[i].x,
+              "led_brightness":data[i].y
+            };
+    temporary.push(datavalue);
+
+  }
+  var request = new XMLHttpRequest();
+  request.open('POST','http://localhost:8000',true);
+  request.setRequestHeader('Content-type',"application/json");
+  request.send(JSON.stringify(temporary));
+  console.log(JSON.stringify(temporary));
+}
+
+window.setInterval(function(){
+  fileReader('we');
+  console.log(GLOBAL_data);
+  fileWriter("meh",GLOBAL_data);
+  //client.get("http://localhost:8000");
+  //console.log(client.responseXML);
+  //console.log("Data",JSON.stringify(temp.response));
+  // if (GLOBAL_response == undefined) {
+  //   console.log("Incorrect Response");
+  // } else {
+  //   GLOBAL_updating = true;
+  //   json_response = JSON.parse(customParse(GLOBAL_response));
+  //   for (var i = 0; i < json_response.length; i++){
+  //     //console.log(json_response[i]);
+  //     //console.log("X: ",json_response[i].env_brightness,"\tY: ",json_response[i].led_brightness);
+  //     var x = map(json_response[i].env_brightness,-100,1200,1,0);
+  //     var y = map(json_response[i].led_brightness,-10,120,0,1);
+  //     data_point = createVector(x,y);
+  //     new_point(data_point,GLOBAL_data);
+  //   }
+  //   GLOBAL_updating = false;
+  // }
+
+},10000);
+
+var fileReader = function(path){
+  readfile = new XMLHttpRequest();
+  readfile.open('GET','../data.csv',true);
+  readfile.onload = function() {
+    GLOBAL_updating = true;
+    if (readfile.status >=200 && readfile.status < 400) {
+      var newText = readfile.responseText.split("\n");
+      for (var i = 0; i < newText.length; i++) {
+        textLine = newText[i].split(",");
+        var x = map(textLine[0],-200,1200,1,0);
+        var y = map(textLine[1],-20,120,0,1);
+        readPoint = createVector(x,y);
+        new_point(readPoint,GLOBAL_data);
+      }
+    }
+    GLOBAL_updating= false;
+  }
+  readfile.onerror = function() {
+    console.log("A problem arose...");
+  }
+  readfile.send();
+}
+
+var fileWriter = function(path,data){
+  var csv_string = "";
+  for (var i = 0; i < data.length; i++) {
+    var x = map(data[i].x,1,0,-200,1200);
+    var y = map(data[i].y,0,1,-20,120);
+    csv_string = csv_string + x + "," + y + "\n"
+  }
+  //console.log(csv_string);
+  return;
+  writefile = new XMLHttpRequest();
+  writefile.open('POST','../data.csv',true)
+  writefile.onload = function(){
+    console.log("Wrote to file");
+  }
+  writefile.onerror = function(){
+    console.log("Could not write to file");
+  }
+  writefile.send(csv_string);
+}
+
+</script>
+
+<style>
+/*
+.graph {
+  background-color: Tomato;
+  color: Blue;
+  height: 200px;
+  width: 300px;
+  margin-left: 20px;
+  margin-top: 20px;
+} */
+
+</style>
+
+<head>
+</head>
+
+<body>
+  <!-- <div class="graph">
+
+  </div> -->
+
+
+</body>
+
+</html>

@@ -27,11 +27,17 @@ def read_file(path):
         points.append(temp)
     return(points)
 
+def write_file(path,myjson):
+    return(myjson)
+
+
 while 1:
     clt_conn, clt_addr = s.accept()
-    request = clt_conn.recv(1024)
+    request = clt_conn.recv(4024)
 
-    print("Client connected!")
+    print("Client connected!\n\n")
+    print(request)
+    print("\n\n")
 
     response_data = 'HTTP/1.1 200 OK \n\n' + str(read_file('data.csv'))
 
