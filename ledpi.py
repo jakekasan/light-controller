@@ -8,6 +8,9 @@ test_values = {100: 100,80: 60,40: 20, 20:10}
 change_sense = 0.1
 my_path = 'data.csv'
 
+led_max = 2000
+led_min = 0
+
 ## Brightness Code
 
 GPIO.setmode(GPIO.BOARD) #!!!!
@@ -32,7 +35,7 @@ def rc_time(mypin):
         GPIO.setup(mypin, GPIO.IN)
         while (GPIO.input(mypin) == GPIO.LOW):
 	        count += 1
-        count = (count/1200) * 100`
+        count = min(int((count/max_led) * 100),100)
         return(count)
 
 def getValues(my_path):

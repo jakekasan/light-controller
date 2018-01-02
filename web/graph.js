@@ -91,12 +91,8 @@ var new_point = function(replacement,data) {
 function draw() {
   background(51);
   for (var i = 0; i < GLOBAL_data.length; i++) {
-    //var x = map(GLOBAL_data[i].x,0,1,0,width);
-    //var y = map(GLOBAL_data[i].y,0,1,height,0);
     var x = map(GLOBAL_data[i].x,0,1,0,width);
     var y = map(GLOBAL_data[i].y,1,0,0,height);
-    //var m_x = map(mouseX,0,width,0,1);
-    //var m_y = map(mouseY,0,height,1,0);
     fill(255);
     stroke(255);
     ellipse(x,y,8,8);

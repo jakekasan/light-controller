@@ -11,13 +11,15 @@
 <script src="files.js"></script>
 <script>
 
+var firstInit = true;
+
 var GLOBAL_response;
 var HttpClient = function() {
   this.get = function(aUrl){
     var anHttpRequest = new XMLHttpRequest();
     anHttpRequest.onreadystatechange = function() {
       if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
-          //console.log("Response Text",anHttpRequest.responseText);
+          console.log("Response Text",anHttpRequest.responseText);
           GLOBAL_response = anHttpRequest.responseText;
           return(anHttpRequest.responseText);
     }
@@ -31,15 +33,17 @@ var HttpClient = function() {
 var tempJson = {"points": [{"env_brightness":1700,"led_brightness":100},{"env_brightness":800,"led_brightness":80},{"env_brightness":100,"led_brightness":10}]};
 
 var client = new HttpClient();
-// client.get("http://localhost:8000", function(response) {
-//   console.log();
-// });
 
-var populateData = function(addr,data){
-  //var mydata = [];
-  var mydata = client.get(addr);
-  //console.log(mydata);
-  return(mydata);
+var populateData = function(addr){
+  var my_data = JSON.parse(GLOBAL_response);
+  client.get(addr);
+  for (var i = 0; i < my_data.length; i++) {
+    var y = map(mydata[i].led_brightness,0,100,0,1);
+    var x = map(mydata[i].env_brightness,0,100,1,0);
+    temp_point = createVector(x,y);
+    console.log("Adding a new point: ",x,y);
+    new_point(temp_point,GLOBAL_data);
+  }
 };
 
 var customParse = function (mystring){
@@ -68,46 +72,36 @@ var sendNewData = function(data){
 }
 
 window.setInterval(function(){
-  if (GLOBAL_data.length > 0) {
-    fileWriter("meh",GLOBAL_data);
+  if (firstInit) {
+    GLOBAL_updating = true;
+    console.log("Initial get request");
+    fileReader('http://localhost:8000');
+    firstInit = false;
+    console.log(GLOBAL_response);
+    GLOBAL_updating = false;
   }
-  fileReader('we');
-  console.log(GLOBAL_data);
-  //client.get("http://localhost:8000");
-  //console.log(client.responseXML);
-  //console.log("Data",JSON.stringify(temp.response));
-  // if (GLOBAL_response == undefined) {
-  //   console.log("Incorrect Response");
-  // } else {
-  //   GLOBAL_updating = true;
-  //   json_response = JSON.parse(customParse(GLOBAL_response));
-  //   for (var i = 0; i < json_response.length; i++){
-  //     //console.log(json_response[i]);
-  //     //console.log("X: ",json_response[i].env_brightness,"\tY: ",json_response[i].led_brightness);
-  //     var x = map(json_response[i].env_brightness,-100,1200,1,0);
-  //     var y = map(json_response[i].led_brightness,-10,120,0,1);
-  //     data_point = createVector(x,y);
-  //     new_point(data_point,GLOBAL_data);
-  //   }
-  //   GLOBAL_updating = false;
-  // }
-  //dataToJSON(GLOBAL_data);
-  sendToServer('http:/localhost:8000',dataToJSON(GLOBAL_data));
+  //console.log(GLOBAL_data);
+  console.log(GLOBAL_response);
+  sendToServer('http://localhost:8000',dataToJSON(GLOBAL_data));
+  GLOBAL_updating = true;
+  fileReader('http://localhost:8000');
+  GLOBAL_updating = false;
 
 },10000);
 
 var fileReader = function(path){
   readfile = new XMLHttpRequest();
-  readfile.open('GET','../data.csv',true);
+  readfile.open('GET',path,true);
   readfile.onload = function() {
     GLOBAL_updating = true;
     if (readfile.status >=200 && readfile.status < 400) {
-      var newText = readfile.responseText.split("\n");
+      console.log(readfile.responseText);
+      var newText = JSON.parse(customParse(readfile.responseText));
       for (var i = 0; i < newText.length; i++) {
-        textLine = newText[i].split(",");
-        var x = map(textLine[0],-200,1200,1,0);
-        var y = map(textLine[1],-20,120,0,1);
+        var x = map(newText[i].env_brightness,0,100,1,0);
+        var y = map(newText[i].led_brightness,0,100,0,1);
         readPoint = createVector(x,y);
+        console.log("Adding point!");
         new_point(readPoint,GLOBAL_data);
       }
     }
@@ -122,8 +116,8 @@ var fileReader = function(path){
 var fileWriter = function(path,data){
   var csv_string = "";
   for (var i = 0; i < data.length; i++) {
-    var x = map(data[i].x,1,0,-200,1200);
-    var y = map(data[i].y,0,1,-20,120);
+    var x = map(data[i].x,1,0,0,100);
+    var y = map(data[i].y,0,1,0,100);
     csv_string = csv_string + x + "," + y + "\n"
   }
   //console.log(csv_string);

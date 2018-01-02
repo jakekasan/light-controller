@@ -1,6 +1,9 @@
 var dataToJSON = function(data){
   var json = [];
   for (var i = 0; i < data.length; i++) {
+    data[i].y = map(data[i].y,0,1,1,0)
+  }
+  for (var i = 0; i < data.length; i++) {
     var json_point = {
       "env_brightness": data[i].x,
       "led_brightness": data[i].y
@@ -21,7 +24,7 @@ sendToServer = function (url,data) {
     dataType: 'json',
     async: false,
     success: function(msg){
-      console.log(msg);
+      console.log("Data sent: ",msg);
     }
   });
 }

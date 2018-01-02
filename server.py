@@ -28,16 +28,26 @@ def read_file(path):
     return(points)
 
 def write_file(path,myjson):
-    return(myjson)
+    #writer = csv.writer(open(path,'w'))
+    print(myjson)
+    return
 
 
 while 1:
     clt_conn, clt_addr = s.accept()
-    request = str(clt_conn.recv(4024))
-    request = "[" + request[request.find("[")+1:request.find("]")] + "]"
+    print("======================")
     print("Client connected!\n\n")
-    for i in json.loads(request):
-        print(i)
+    request = str(clt_conn.recv(4024))
+    try:
+        request = json.loads("[" + request[request.find("[")+1:request.find("]")] + "]")
+    except:
+        print("Error: could not parse raw HTTP")
+        request = []
+    if request == []:
+        print("Error: JSON is empty")
+    else:
+        write_file('data.csv',request)
+
     print("\n\n")
 
     response_data = 'HTTP/1.1 200 OK \n\n' + str(read_file('data.csv'))
@@ -47,3 +57,4 @@ while 1:
     clt_conn.sendall(mod_res)
     clt_conn.close()
     print("Client served and disconnected!")
+    print("\n\n")
