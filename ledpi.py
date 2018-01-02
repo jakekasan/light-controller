@@ -4,7 +4,7 @@ import csv
 import time
 import RPi.GPIO as GPIO
 
-test_values = {1000: 100,800: 60,400: 20, 200:10}
+test_values = {100: 100,80: 60,40: 20, 20:10}
 change_sense = 0.1
 my_path = 'data.csv'
 
@@ -32,6 +32,7 @@ def rc_time(mypin):
         GPIO.setup(mypin, GPIO.IN)
         while (GPIO.input(mypin) == GPIO.LOW):
 	        count += 1
+        count = (count/1200) * 100`
         return(count)
 
 def getValues(my_path):

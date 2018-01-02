@@ -33,10 +33,11 @@ def write_file(path,myjson):
 
 while 1:
     clt_conn, clt_addr = s.accept()
-    request = clt_conn.recv(4024)
-
+    request = str(clt_conn.recv(4024))
+    request = "[" + request[request.find("[")+1:request.find("]")] + "]"
     print("Client connected!\n\n")
-    print(request)
+    for i in json.loads(request):
+        print(i)
     print("\n\n")
 
     response_data = 'HTTP/1.1 200 OK \n\n' + str(read_file('data.csv'))
