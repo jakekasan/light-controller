@@ -1,12 +1,11 @@
 var dataToJSON = function(data){
   var json = [];
   for (var i = 0; i < data.length; i++) {
-    data[i].y = map(data[i].y,0,1,1,0)
-  }
-  for (var i = 0; i < data.length; i++) {
+    var x = map(data[i].x,0,1,0,100);
+    var y = map(data[i].y,0,1,0,100);
     var json_point = {
-      "env_brightness": data[i].x,
-      "led_brightness": data[i].y
+      "env_brightness": x,
+      "led_brightness": y
     };
     json.push(json_point);
   }
@@ -15,7 +14,7 @@ var dataToJSON = function(data){
 }
 
 
-sendToServer = function (url,data) {
+var sendToServer = function (url,data) {
   $.ajax({
     url: url,
     type: 'POST',

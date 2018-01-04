@@ -5,7 +5,7 @@ var GLOBAL_dataLimit = 5;
 var GLOBAL_updating = false;
 
 function setup() {
-  createCanvas(1200, 600);
+  createCanvas(500, 500);
   background(51);
 }
 
@@ -24,27 +24,9 @@ function mousePressed() {
   }
 }
 
-var findClosestPoint = function(replacement,data){
-  var best_difference = 100000;
-  var best_diff_i = GLOBAL_dataLimit + 1;
-  //console.log("replacement: ",replacement);
-  //console.log("data: ",data);
-  for (var i = 0; i < data.length; i++) {
-    var current_difference = Math.sqrt((replacement.x - data[i].x)**2);
-    if (current_difference < best_difference) {
-      best_diff_i = i;
-      best_difference = current_difference;
-    }
-  }
-  return(data[best_diff_i]);
-}
-
-var euclDistance = function(pointA,pointB) {
-  return(Math.sqrt((pointA.x-pointB.x)**2 + (pointA.y-pointB.y)**2));
-}
 
 function mouseReleased() {
-  if (mouseX > width || mouseY > height) {
+  if (mouseX > (width-(width*0.1)) || mouseY > (height-height*0.1)) {
     console.log("Out of bounds.");
     return;
   }
@@ -61,38 +43,12 @@ function mouseReleased() {
   new_point(mypoint,GLOBAL_data);
 }
 
-var new_point = function(replacement,data) {
-  //console.log(data);
-  //console.log("The current data:",data);
-  if (data.length == 0) {
-    data.push(replacement);
-    return(data);
-  }
-  var nearbyPoint = findClosestPoint(replacement,data);
-  if (data.length < GLOBAL_dataLimit) {
-    if (euclDistance(replacement,nearbyPoint) < map(20,0,Math.sqrt(height**2+width**2),0,1)) {
-      data[data.indexOf(nearbyPoint)] = replacement;
-    } else {
-      data.push(replacement);
-    }
-  } else {
-    data[data.indexOf(nearbyPoint)] = replacement;
-  }
-  if (GLOBAL_updating == false) {
-    // run the sendNewData function
-    //sendNewData(data);
-    console.log("Updating file");
-    return(data);
-  } else {
-    return(data);
-  }
-}
 
 function draw() {
   background(51);
   for (var i = 0; i < GLOBAL_data.length; i++) {
-    var x = map(GLOBAL_data[i].x,0,1,0,width);
-    var y = map(GLOBAL_data[i].y,1,0,0,height);
+    var x = map(GLOBAL_data[i].x,-0.1,1.1,0,width);
+    var y = map(GLOBAL_data[i].y,-0.1,1.1,height,0);
     fill(255);
     stroke(255);
     ellipse(x,y,8,8);
@@ -105,6 +61,7 @@ function draw() {
     if (eucl_dist < 10) {
       line(0,y,x,y);
       line(x,y,x,height);
+      var mylabel = "X: " + JSON.stringify(GLOBAL_data[i].x) + "\nY:" + JSON.stringify(GLOBAL_data[i].y)
       text(x,x+10,y+10);
     }
     //console.log("Point distance : ", eucl_dist);

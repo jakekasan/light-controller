@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import time
 import socket
 import requests
 import json
@@ -28,33 +29,56 @@ def read_file(path):
     return(points)
 
 def write_file(path,myjson):
-    #writer = csv.writer(open(path,'w'))
-    print(myjson)
+    writer = csv.writer(open(path,'w'))
+    for component in myjson:
+        writer.writerow([int(component['env_brightness']),int(component['led_brightness'])])
     return
 
 
 while 1:
     clt_conn, clt_addr = s.accept()
-    print("======================")
+    print("======================\nEvent at time: ", time.ctime(),"\n")
     print("Client connected!\n\n")
     request = str(clt_conn.recv(4024))
-    try:
-        request = json.loads("[" + request[request.find("[")+1:request.find("]")] + "]")
-    except:
-        print("Error: could not parse raw HTTP")
-        request = []
-    if request == []:
-        print("Error: JSON is empty")
-    else:
-        write_file('data.csv',request)
+    if "GET" in request:
+        print("Received GET request\n")
+        print(request)
+        print("\n\n")
+        response_data = 'HTTP/1.1 200 OK \n\n' + str(read_file('data.csv'))
 
-    print("\n\n")
+        mod_res = response_data.encode('utf-8')
 
-    response_data = 'HTTP/1.1 200 OK \n\n' + str(read_file('data.csv'))
+        print("Replying to client. Printing reply.\n")
+        print(mod_res)
+        print("\n\n")
 
-    mod_res = response_data.encode('utf-8')
-
-    clt_conn.sendall(mod_res)
-    clt_conn.close()
-    print("Client served and disconnected!")
-    print("\n\n")
+        clt_conn.sendall(mod_res)
+        clt_conn.close()
+        print("Client served and disconnected!")
+        print("\n\n")
+    elif "POST" in request:
+        print("Recieved POST request")
+        try:
+            if "[" not in request:
+                print("No data appended. Printing request.\n")
+                print(request)
+                print("\n")
+                request_json = []
+            else:
+                request_json = json.loads("[" + request[request.find("[")+1:request.find("]")] + "]")
+        except:
+            print("Error parsing json, printing request\n")
+            print(request)
+            print("\n\n")
+            request_json = []
+        if request_json == []:
+            print("Error: JSON is empty")
+        else:
+            print("Request accepted. Printing JSON")
+            write_file('data.csv',request_json)
+        post_response = 'HTTP/1.1 200 OK \n\n'.encode('utf-8')
+        print("\n\n")
+        print("Client served and disconnected!")
+        print("\n\n")
+        clt_conn.sendall(post_response)
+        clt_conn.close()
