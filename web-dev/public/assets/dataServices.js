@@ -11,8 +11,8 @@ module.exports = function(data, proposedPoint) {
   }
   console.log("Closest point is Env: " + data[maxIndex].env_brightness + "\tLed: " + data[maxIndex].led_brightness);
 
-  data[maxIndex].env_brightness = proposedPoint.env_brightness;
-  data[maxIndex].led_brightness = proposedPoint.led_brightness;
+  data[maxIndex].env_brightness = parseInt(proposedPoint.env_brightness);
+  data[maxIndex].led_brightness = parseInt(proposedPoint.led_brightness);
 
   return(data);
 }

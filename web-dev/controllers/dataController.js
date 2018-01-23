@@ -14,10 +14,6 @@ module.exports = function(app){
 
   Here are (will be) the functions which handle POST and GET requests from the webpage
 
-
-
-
-
   */
 
   app.get('/',function(request,response){

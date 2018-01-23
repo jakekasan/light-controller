@@ -3,6 +3,7 @@
 import csv
 import time
 import RPi.GPIO as GPIO
+import requests
 
 test_values = {100: 100,80: 60,40: 20, 20:10}
 change_sense = 0.1
@@ -28,26 +29,29 @@ pwm.start(0)
 
 
 def rc_time(mypin):
-        count = 0
-        GPIO.setup(mypin, GPIO.OUT)
-        GPIO.output(mypin, GPIO.LOW)
-        time.sleep(0.1)
-        GPIO.setup(mypin, GPIO.IN)
-        while (GPIO.input(mypin) == GPIO.LOW):
-	        count += 1
-        count = min(int((count/max_led) * 100),100)
-        return(count)
+    count = 0
+    GPIO.setup(mypin, GPIO.OUT)
+    GPIO.output(mypin, GPIO.LOW)
+    time.sleep(0.1)
+    GPIO.setup(mypin, GPIO.IN)
+    while (GPIO.input(mypin) == GPIO.LOW):
+        count += 1
+    count = min(int((count/max_led) * 100),100)
+    return(count)
 
 def getValues(my_path):
-        my_file = csv.reader(open(my_path,'r'))
-        my_file = list(my_file)
-        temp = {}
-        for i in my_file:
-                #print("Found a value of %s at %s" % (i[1],i[0]))
-                temp[int(i[0])] = int(i[1])
-	# read the file and get the values
-        return(temp)
-        # return a list of the values
+    my_file = csv.reader(open(my_path,'r'))
+    my_file = list(my_file)
+    temp = {}
+    for i in my_file:
+            #print("Found a value of %s at %s" % (i[1],i[0]))
+            temp[int(i[0])] = int(i[1])
+    # read the file and get the values
+    return(temp)
+    # return a list of the values
+
+def getJSON(url):
+
 
 def extrapolate(bright, mydata):
         # arrange mydata by brightness
