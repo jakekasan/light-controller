@@ -16,15 +16,15 @@ module.exports = function(app){
 
   */
 
-  app.get('/',function(request,response){
-    console.log("[GET] index.html");
-    console.log("My dir: " + __dirname);
-    response.sendFile("index.html")
+
+  app.get('/', function(request,response){
+    response.render('values',{mydata: data});
   });
 
   app.get('/data', function(request,response){
     response.render('values',{mydata: data});
   });
+
 
   app.post('/data', urlencodedParser, function (request,response){
     //console.log("[POST] " + JSON.stringify(request.body));

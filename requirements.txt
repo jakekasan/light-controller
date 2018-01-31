@@ -1,1 +1,3 @@
 requests
+RPi.GPIO
+smbus

@@ -2,33 +2,29 @@
 
 import csv
 import time
-import RPi.GPIO as GPIO
 import requests
+from light import get_env_light,extrapolate,setup_led,set_led_light
+from comms import get_data,post_update
 
-def getBrightness(rc_pin):
-    count = 0
-    GPIO.setup(mypin, GPIO.OUT)
-    GPIO.output(mypin,GPIO.LOW)
-    time.sleep(0.1)
-    GPIO.setup(mypin, GPIO.IN)
-    while (GPIO.input(mypin) == GPIO.LOW):
-        count += 1
-
-    return(count)
-
-def getJSON(url):
-    r = requests.get(url)
-    for element in r.json:
-        print(element.led_brightness,element.env_brightness)
-
-def returnLEDlight(brightness,data):
-    lower = [x for x in data if x.env_brightness < brightness]
-    higher = [x for x in data if x.env_brightness > brightness]
-
+SERVER_ADDR = "localhost:6666"
 
 if __name__ == "__main__":
-    try:
-        last_brightness = get_brightness(lightness pin)
-        current_pulse = 0
-        data = get_json("localhost:6666")
-        
+    # init stuff
+    pwm,my_GPIO = setup_led()
+
+    while(1):
+        try:
+            print(time.time(),"Start of Cycle")
+            print("Getting data from server...")
+            data = get_data(SERVER_ADDR)
+            print("Got data: ", data)
+            env_light = get_env_light(value_to_get="Visible")
+            print("The light in the environment is: ",env_light)
+            print("Adjusting accordingly...")
+            set_led_light(data,env_light,pwm)
+            print("Light adjusted. End of cycle...")
+            time.sleep(2)
+        except(e):
+            print(e)
+        finally:
+            my_GPIO.cleanup()
