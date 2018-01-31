@@ -24,7 +24,7 @@ if __name__ == "__main__":
             set_led_light(data,env_light,pwm)
             print("Light adjusted. End of cycle...")
             time.sleep(2)
-        except(e):
-            print(e)
+        except:
+            print("Problem!")
         finally:
             my_GPIO.cleanup()

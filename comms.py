@@ -25,8 +25,9 @@ practice_data = [
 ]
 
 def get_data(url):
-    r = requests.get(url)
-    if r.status != 200:
+    try:
+        r = requests.get(url)
+    except:
         print("Could not connect to server")
         return(practice_data)
     return(r.json)

@@ -30,9 +30,9 @@ practice_data = [
 ]
 
 GPIO.setmode(GPIO.BOARD)
-LED_PIN_ID = 12
+LED_PIN_ID = 11
 
-def setup_led(GPIO,led_id=12):
+def setup_led(led_id=11):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(led_id,GPIO.OUT)
     pwm = GPIO.PWM(led_id,1000)
