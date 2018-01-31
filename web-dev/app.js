@@ -12,6 +12,6 @@ app.use(express.static('./public'))
 
 dataController(app);
 
-app.listen(8888);
-console.log("Listening at port: 8888");
+app.listen(6666);
+console.log("Listening at port: 6666");
 console.log("Waiting for client...");
