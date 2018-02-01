@@ -35,7 +35,9 @@ LED_PIN_ID = 11
 def setup_led(led_id=11):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(led_id,GPIO.OUT)
+    GPIO.output(led_id,GPIO.HIGH)
     pwm = GPIO.PWM(led_id,1000)
+    pwm.start(0)
     return(pwm,GPIO)
 
 def get_env_light(value_to_get="Visible"):
