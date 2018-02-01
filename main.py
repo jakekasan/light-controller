@@ -3,17 +3,18 @@
 import csv
 import time
 import requests
+import sys
 from light import get_env_light,extrapolate,setup_led,set_led_light
 from comms import get_data,post_update
 
-SERVER_ADDR = "localhost:6666"
+SERVER_ADDR = "http://localhost:6666/data/json"
 
 if __name__ == "__main__":
     # init stuff
     pwm,my_GPIO = setup_led()
 
-    while(1):
-        try:
+    try:
+        while(1):
             print(time.time(),"Start of Cycle")
             print("Getting data from server...")
             data = get_data(SERVER_ADDR)
@@ -24,7 +25,8 @@ if __name__ == "__main__":
             set_led_light(data,env_light,pwm)
             print("Light adjusted. End of cycle...")
             time.sleep(2)
-        except:
+    except:
             print("Problem!")
-        finally:
+    finally:
             my_GPIO.cleanup()
+            sys.exit()

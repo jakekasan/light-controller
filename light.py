@@ -79,6 +79,6 @@ def extrapolate(data,env_point):
     return(int(((higher["led_brightness"]-lower["led_brightness"])/(higher["env_brightness"] - lower["env_brightness"]))*(env_point-lower["env_brightness"])))
 
 def set_led_light(data,env_value,pwm):
-    led_value = extrapolate(data,env_value)
-    pwm.ChangeDutyCycle(env_value)
+    led_value = max(0,min(100,extrapolate(data,env_value)))
+    pwm.ChangeDutyCycle(led_value)
     return

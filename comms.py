@@ -1,5 +1,6 @@
 import requests
 import time
+import json
 
 practice_data = [
     {
@@ -30,7 +31,9 @@ def get_data(url):
     except:
         print("Could not connect to server")
         return(practice_data)
-    return(r.json)
+    #print(r.json)
+    #print(json.dumps(r.json))
+    return(practice_data)
 
 def post_update(url):
     r = requests.post(url)
