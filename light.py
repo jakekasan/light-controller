@@ -80,5 +80,6 @@ def extrapolate(data,env_point):
 
 def set_led_light(data,env_value,pwm):
     led_value = max(0,min(100,extrapolate(data,env_value)))
+    print("Setting LED at: {}".format(led_value))
     pwm.ChangeDutyCycle(led_value)
     return
