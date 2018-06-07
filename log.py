@@ -12,3 +12,8 @@ class Logger:
     def interpolate(self,value):
         value -= self.min_light
         return value / (self.max_light - self.min_light)
+
+    def save(self):
+        with open("./log.txt","w") as file:
+            file.write("max:{},min:{}".format(self.max_light,self.min_light))
+            file.close()
