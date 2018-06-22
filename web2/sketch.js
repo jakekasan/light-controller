@@ -13,13 +13,18 @@ function consolidateData(data,newData){
   for (point of newData){
     let dataInData = data.map(x => { dataPointEquals(x,point) }).includes(true);
     if (dataInData) {
+      // get new points and figure out which ones to replace
 
     }
   }
 }
 
 function isDataNew(currentData,newData){
-  currentData.map(cur => { cur.map() })
+  if (JSON.stringify(sortedData(currentData)) != JSON.stringify(sortedData(newData))) {
+    // data is not the same, get new points
+    return true;
+  }
+  return false
 }
 
 function dataPointEquals(pointA,pointB){
@@ -37,13 +42,15 @@ function sortData(data){
   finalData.push(data.pop())
   while (data.length > 0) {
     let chosen = data.pop();
-
+    finalData = sortedInsert(finalData,data.pop(),(x) => { x.env });
   }
-
+  return finalData;
 }
 
-function sortDataInsert(data,item,sortingFunction){
+function sortedInsert(data,item,sortingFunction){
   for (let i = 0; i < data.length; i++){
-    
+    if (sortingFunction(data[i]) < sortingFunction(item)){
+      return data.splice(i,0,item);
+    }
   }
 }
