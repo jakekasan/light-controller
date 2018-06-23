@@ -42,7 +42,7 @@ function draw(){
 
 
   if (data){
-    frameRate(1);
+    frameRate(30);
     for (let dataPoint of data){
       noStroke();
       fill(255);
@@ -59,7 +59,7 @@ function draw(){
 }
 
 function mousePressed(){
-  noLoop();
+  //noLoop();
 }
 
 function checkPointsForMouse(paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
@@ -80,6 +80,20 @@ function targetLine(point,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
   //let y = (sizeOfBoxVert + paddingVert*2) - ((point.led/100)*sizeOfBoxVert + paddingVert);
   line(paddingHor,y,x,y);
   line(x,y,x,paddingVert);
+
+  // now the text boxes (oriented correctly...)
+  push();
+  translate(0,height);
+  scale(1,-1);
+  //x = sizeOfBoxHor - x;
+  x = (point.env > 70) ? x-(paddingHor*5) : x;
+  y = sizeOfBoxVert - y;
+  y = y + ((point.led < 70) ? paddingVert : (-paddingVert*10) );
+  text(JSON.stringify({
+    "env":point.env,
+    "led":point.led
+  }),x,y);
+  pop();
 }
 
 function getDistanceFromMouse(point,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
