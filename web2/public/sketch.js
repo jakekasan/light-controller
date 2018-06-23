@@ -7,7 +7,7 @@ const sizeOfBoxHor = myWidth*0.85;
 const paddingVert = myHeight*0.075;
 const paddingHor = myWidth*0.075; 
 
-const pointSelectedIndex = -1;
+var pointSelectedIndex = -1;
 
 
 fetch("http://localhost:8080/data").then(res => res.json()).then(json => dataSetter(json));
@@ -66,20 +66,22 @@ function draw(){
 
 function mousePressed(){
   console.log("Mouse pressed!");
-  var potentialPointIndex = isAPointNearMouse(100);
+  var potentialPointIndex = isAPointNearMouse(10);
   if (potentialPointIndex > -1){
     pointSelectedIndex = potentialPointIndex;
-    console.log(pointSelectedIndex);
+    
     //data.pop(potentialPointIndex);
   }
+  targetLine(generatePointFromMouse());
 }
 
 function mouseReleased(){
   let newPoint = generatePointFromMouse();
   if (pointSelectedIndex > -1){
     data[pointSelectedIndex] = newPoint;
+    pointSelectedIndex = -1;
   } else {
-    // do nothing
+    console.log("No point marked");
   }
 }
 
@@ -88,8 +90,8 @@ function addNewPoint(){
 }
 
 function generatePointFromMouse(){
-  let x = ((mouseX - (paddingHor))/sizeOfBoxHor)*100;
-  let y = ((sizeOfBoxVert - mouseY + paddingVert)/sizeOfBoxVert)*100;
+  let x = Math.floor(((mouseX - (paddingHor))/sizeOfBoxHor)*100);
+  let y = Math.floor(((sizeOfBoxVert - mouseY + paddingVert)/sizeOfBoxVert)*100);
 
   return {
     "env":x,
@@ -111,18 +113,16 @@ function checkPointsForMouse(){
 }
 
 function isAPointNearMouse(threshold){
-  console.log("Checking points...",data.length);
   var closestPointIndex;
   var minDist = height*width; // placeholder high amount
-  for (let i; i < data.length; i++){
+  for (let i = 0; i < data.length; i++){
     let distance = getDistanceFromMouse(data[i]);
-    console.log("distance is",distance);
     if (distance < minDist){
       closestPointIndex = i;
+      minDist = distance;
     }
   }
   if (minDist <= threshold) {
-    console.log("Closest to:",data[closestPointIndex].env,data[closestPointIndex].led)
     return closestPointIndex;
   } else {
     return -1;
