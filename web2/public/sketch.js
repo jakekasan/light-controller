@@ -1,12 +1,34 @@
-const data = fetch("http://localhost:8080")
+var data;
 
+fetch("http://localhost:8080/data").then(res => res.json()).then(json => dataSetter(json));
+
+function dataSetter(newData){
+  data = newData;
+}
 
 function setup(){
+  // ideally get screen size here and work out canvas size
   createCanvas(400,400);
 }
 
 function draw(){
   background(0);
+  if (data){
+    frameRate(10);
+    for (let dataPoint of data){
+      stroke(255);
+      fill(255);
+      let x = (dataPoint.env/110)*width + (width*0.05);
+      let y = (dataPoint.led/110)*height + (height*0.05);
+      ellipse(x,y,10,10);
+    }
+  } else {
+    frameRate(1);
+  }
+}
+
+function mousePressed(){
+  console.log(data);
 }
 
 function consolidateData(data,newData){
