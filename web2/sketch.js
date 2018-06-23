@@ -1,22 +1,24 @@
-const data;
 
 function setup(){
-  let
+  createCanvas(400,400);
 }
 
 function draw(){
-
+  background(0);
 }
 
 function consolidateData(data,newData){
   let finalData = [];
-  for (point of newData){
-    let dataInData = data.map(x => { dataPointEquals(x,point) }).includes(true);
-    if (dataInData) {
-      // get new points and figure out which ones to replace
+  // for (point of newData){
+  //   let dataInData = data.map(x => { dataPointEquals(x,point) }).includes(true);
+  //   if (dataInData) {
+  //     // get new points and figure out which ones to replace
+  //
+  //   }
+  // }
+  originalData = sortData(data)
+  newData = sortData(newData)
 
-    }
-  }
 }
 
 function isDataNew(currentData,newData){
@@ -25,6 +27,14 @@ function isDataNew(currentData,newData){
     return true;
   }
   return false
+}
+
+function isDataPointIn(data,point){
+  for (dataPoint of data){
+    if (!dataPointEquals(dataPoint,point)){
+
+    }
+  }
 }
 
 function dataPointEquals(pointA,pointB){
@@ -51,6 +61,19 @@ function sortedInsert(data,item,sortingFunction){
   for (let i = 0; i < data.length; i++){
     if (sortingFunction(data[i]) < sortingFunction(item)){
       return data.splice(i,0,item);
+    }
+  }
+}
+
+function sortedReplace(data,item,sortingFunction){
+  if (!sortingFunction){
+    sortingFunction = function(x) {
+      return x.env
+    }
+  }
+  for (let i = 0; i < data.length; i++){
+    if (sortingFunction(data[i]) < sortingFunction(item)) {
+      return data.splice(i,1,item)
     }
   }
 }
