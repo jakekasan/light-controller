@@ -3,7 +3,7 @@ var data;
 fetch("http://localhost:8080/data").then(res => res.json()).then(json => dataSetter(json));
 
 function dataSetter(newData){
-  data = newData;
+  data = newData;//sortData(newData);
 }
 
 function setup(){
@@ -12,6 +12,8 @@ function setup(){
 }
 
 function draw(){
+  translate(0,height);
+  scale(1,-1);
   background(200);
   noStroke();
   fill(122);
@@ -40,31 +42,60 @@ function draw(){
 
 
   if (data){
-    frameRate(10);
+    frameRate(1);
     for (let dataPoint of data){
       noStroke();
       fill(255);
       let x = (dataPoint.env/100)*(width*0.85) + (width*0.075);
       let y = (dataPoint.led/100)*(height*0.85) + (height*0.075);
       ellipse(x,y,10,10);
+
+      // check if mouse is close to a point
+      checkPointsForMouse(paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor);
     }
   } else {
     frameRate(1);
   }
-
-  /* mouse passive events
-    hovering over point -> display coordinates
-    hovering over canvas -> display letters and numbers at the edge
-
-  */
-
-
-  
 }
 
 function mousePressed(){
-  console.log(data);
+  noLoop();
 }
+
+function checkPointsForMouse(paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
+  for (let myPoint of data) {
+    //console.log("Checking point...")
+    let dist = getDistanceFromMouse(myPoint,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor);
+    if ((dist/height) < 0.05){
+      //console.log("Mouse is very close");
+      targetLine(myPoint,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor);
+    }
+  }
+}
+
+function targetLine(point,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
+  stroke(255,0,0);
+  let x = (point.env/100)*sizeOfBoxHor + paddingHor;
+  let y = (point.led/100)*sizeOfBoxVert + paddingVert;
+  //let y = (sizeOfBoxVert + paddingVert*2) - ((point.led/100)*sizeOfBoxVert + paddingVert);
+  line(paddingHor,y,x,y);
+  line(x,y,x,paddingVert);
+}
+
+function getDistanceFromMouse(point,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
+  let x = (point.env/100)*sizeOfBoxHor+paddingHor;
+  let y = (sizeOfBoxVert+paddingVert) - (point.led/100)*sizeOfBoxVert;
+
+
+  let distX = x - mouseX;
+  let distY = y - mouseY;
+  let pythdist = Math.sqrt((distX**2 + distY**2));
+  //console.log(pythdist);
+
+  return pythdist;
+}
+
+
 
 function consolidateData(data,newData){
   let finalData = [];
