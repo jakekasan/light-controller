@@ -12,19 +12,54 @@ function setup(){
 }
 
 function draw(){
-  background(0);
+  background(200);
+  noStroke();
+  fill(122);
+  rect(width*0.05,height*0.05,width*0.9,height*0.9);
+
+  // lines
+
+  let numberOfLines = 10; // actual number of lines will be this plus one
+  let sizeOfBoxVert = height*0.85;
+  let sizeOfBoxHor = width*0.85;
+  let paddingVert = height*0.075;
+  let paddingHor = width*0.075;  
+
+  // vertical
+  stroke(200);
+
+  for (let i = 0; i <= numberOfLines; i++) {
+    line(paddingHor+(sizeOfBoxHor/numberOfLines)*i,paddingVert,paddingHor+(sizeOfBoxHor/numberOfLines)*i,paddingVert+sizeOfBoxVert);
+  }
+
+  // horizontal
+
+  for (let i = 0; i <= numberOfLines; i++) {
+    line(paddingHor,paddingVert+(sizeOfBoxVert/numberOfLines)*i,paddingHor+sizeOfBoxHor,paddingVert+(sizeOfBoxVert/numberOfLines)*i);
+  }
+
+
   if (data){
     frameRate(10);
     for (let dataPoint of data){
-      stroke(255);
+      noStroke();
       fill(255);
-      let x = (dataPoint.env/110)*width + (width*0.05);
-      let y = (dataPoint.led/110)*height + (height*0.05);
+      let x = (dataPoint.env/100)*(width*0.85) + (width*0.075);
+      let y = (dataPoint.led/100)*(height*0.85) + (height*0.075);
       ellipse(x,y,10,10);
     }
   } else {
     frameRate(1);
   }
+
+  /* mouse passive events
+    hovering over point -> display coordinates
+    hovering over canvas -> display letters and numbers at the edge
+
+  */
+
+
+  
 }
 
 function mousePressed(){

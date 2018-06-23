@@ -1,7 +1,7 @@
 module.exports = class DataMaster {
   constructor(hardcode) {
     this.log = [];
-    this.data = (hardcode) ? [{"env":100,"led":100},{"env":75,"led":75},{"env":50,"led":50},{"env":25,"led":25},{"env":0,"led":0}] : [];
+    this.data = (hardcode) ? hardcodedData : [];
   }
 
   getData(){
@@ -58,3 +58,11 @@ module.exports = class DataMaster {
 
 
 }
+
+var hardcodedData = [
+  {"env":100,"led":100},
+  {"env":75,"led":75},
+  {"env":50,"led":50},
+  {"env":25,"led":25},
+  {"env":0,"led":0}
+]
