@@ -1,4 +1,12 @@
 var data;
+const myHeight = 600;
+const myWidth = 600;
+const numberOfLines = 10; // actual number of lines will be this plus one
+const sizeOfBoxVert = myHeight*0.85;
+const sizeOfBoxHor = myWidth*0.85;
+const paddingVert = myHeight*0.075;
+const paddingHor = myWidth*0.075; 
+
 
 fetch("http://localhost:8080/data").then(res => res.json()).then(json => dataSetter(json));
 
@@ -8,7 +16,7 @@ function dataSetter(newData){
 
 function setup(){
   // ideally get screen size here and work out canvas size
-  createCanvas(400,400);
+  createCanvas(myWidth,myHeight);
 }
 
 function draw(){
@@ -21,11 +29,7 @@ function draw(){
 
   // lines
 
-  let numberOfLines = 10; // actual number of lines will be this plus one
-  let sizeOfBoxVert = height*0.85;
-  let sizeOfBoxHor = width*0.85;
-  let paddingVert = height*0.075;
-  let paddingHor = width*0.075;  
+   
 
   // vertical
   stroke(200);
@@ -51,7 +55,7 @@ function draw(){
       ellipse(x,y,10,10);
 
       // check if mouse is close to a point
-      checkPointsForMouse(paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor);
+      checkPointsForMouse();
     }
   } else {
     frameRate(1);
@@ -59,21 +63,31 @@ function draw(){
 }
 
 function mousePressed(){
-  //noLoop();
+  
 }
 
-function checkPointsForMouse(paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
+function checkPointsForMouse(){
   for (let myPoint of data) {
     //console.log("Checking point...")
-    let dist = getDistanceFromMouse(myPoint,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor);
+    let dist = getDistanceFromMouse(myPoint);
     if ((dist/height) < 0.05){
       //console.log("Mouse is very close");
-      targetLine(myPoint,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor);
+      targetLine(myPoint);
     }
   }
 }
 
-function targetLine(point,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
+
+function getNearbyPoint(){
+  // returns the nearest point. If no point is present then undefined is returned
+  var closestPoint;
+  var minDist = height*width; // placeholder high amount
+  for (myPoint in data){
+    let distance = getDistanceFromMouse(myPoint);
+  }
+}
+
+function targetLine(point){
   stroke(255,0,0);
   let x = (point.env/100)*sizeOfBoxHor + paddingHor;
   let y = (point.led/100)*sizeOfBoxVert + paddingVert;
@@ -96,7 +110,7 @@ function targetLine(point,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
   pop();
 }
 
-function getDistanceFromMouse(point,paddingVert,paddingHor,sizeOfBoxVert,sizeOfBoxHor){
+function getDistanceFromMouse(point){
   let x = (point.env/100)*sizeOfBoxHor+paddingHor;
   let y = (sizeOfBoxVert+paddingVert) - (point.led/100)*sizeOfBoxVert;
 
