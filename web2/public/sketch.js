@@ -1,3 +1,5 @@
+const data = fetch("http://localhost:8080")
+
 
 function setup(){
   createCanvas(400,400);
