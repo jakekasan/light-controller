@@ -1,5 +1,14 @@
-module.exports = function(app){
+module.exports = function(app,dataMaster){
   app.get("/",(req,res) => {
-    res.send("./../public/index.html");
+    res.sendFile("index.html");
   });
+
+  app.get("/data",(req,res) => {
+    res.send(dataMaster.getData());
+  });
+
+  app.post("/data",(req,res) => {
+    // consolidate data
+    res.send();
+  })
 }
