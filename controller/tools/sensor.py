@@ -1,11 +1,12 @@
 import smbus
 import asyncio
+import requests
 
 class SensorReader:
     def __init__(self,GPIO):
         self.values = []
 
-    def get_env_light(value_to_get="Visible"):
+    def get_env_light(self,value_to_get="Visible"):
         bus = smbus.SMBus(1)
         bus.write_byte_data(0x39, 0x00 | 0x80, 0x03)
         bus.write_byte_data(0x39, 0x01 | 0x80, 0x02)
@@ -19,9 +20,15 @@ class SensorReader:
             "Infrared": ch1,
             "Visible": ch2
         }
+
+        # send data to server
+
+        requests.post()
+        
         if value_to_get not in obj.keys():
             return(obj)
         else:
             return(obj[value_to_get])
 
-    def 
+    def update(self):
+        pass
