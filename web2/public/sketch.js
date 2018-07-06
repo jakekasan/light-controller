@@ -80,6 +80,21 @@ function mouseReleased(){
   if (pointSelectedIndex > -1){
     data[pointSelectedIndex] = newPoint;
     pointSelectedIndex = -1;
+    fetch("http://localhost:8080/data",{
+      method:"POST",
+      mode:"cors",
+      cache:"no-cache",
+      credentials:"same-origin",
+      headers: {
+        "Content-Type":"application/json; charset=utf-8"
+      },
+      redirect: "follow",
+      referrer: "no-referrer",
+      body: JSON.stringify(data),
+    })
+    .then(res => console.log(res))
+    .catch(err => console.log(err));
+
   } else {
     console.log("No point marked");
   }

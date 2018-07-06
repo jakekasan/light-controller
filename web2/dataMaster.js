@@ -2,6 +2,21 @@ module.exports = class DataMaster {
   constructor(hardcode) {
     this.log = [];
     this.data = (hardcode) ? hardcodedData : [];
+    this.status = {
+      "min":100000,
+      "max":0
+    };
+  }
+
+  getStatus(){
+    return this.status;
+  }
+
+  submitStatus(status){
+    this.status = {
+      "min":(status["min"] < this.status["min"]) ? status["min"] : this.status["min"],
+      "max":(status["max"] > this.status["max"]) ? status["max"] : this.status["max"]
+    };
   }
 
   getData(){
@@ -26,11 +41,11 @@ module.exports = class DataMaster {
 
   sortData(data){
     if (data.length < 1) { return [] }
-    let finalData = [];
-    finalData.push(data.pop())
+    var finalData = [];
+    finalData.push(data.pop());
     while (data.length > 0) {
       let chosen = data.pop();
-      finalData = sortedInsert(finalData,data.pop(),(x) => { x.env });
+      finalData = this.sortedInsert(finalData,chosen,(x) => { x.env });
     }
     return finalData;
   }
@@ -38,9 +53,12 @@ module.exports = class DataMaster {
   sortedInsert(data,item,sortingFunction){
     for (let i = 0; i < data.length; i++){
       if (sortingFunction(data[i]) < sortingFunction(item)){
-        return data.splice(i,0,item);
+        data.splice(i,0,item);
+        return data;
       }
     }
+    data.push(item);
+    return data;
   }
 
   sortedReplace(data,item,sortingFunction){
