@@ -5,7 +5,7 @@ import csv
 from tools.sensor import Sensor
 from tools.ledmanager import LEDManager
 
-led_gpio = 14
+led_gpio = 11
 
 
 def main():
