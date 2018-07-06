@@ -18,8 +18,8 @@ def main():
         while True:
             sensor.update()
             led.update()
-    except e:
-        print(e)
+    except:
+        print("Encountered Problem")
     finally:
         led.cleanup()
         sensor.cleanup()

@@ -68,7 +68,7 @@ class Sensor:
         return corrected_value
 
     def update(self):
-        self.values.append(get_env_light())
+        self.values.append(self.get_env_light())
         self.newStatus(self.values[-1])
 
     def cleanup(self):

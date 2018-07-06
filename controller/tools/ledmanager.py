@@ -2,7 +2,7 @@ import requests
 import RPi.GPIO as GPIO
 
 class LEDManager:
-    def __init__(self,sensor,led_gpio=14,SERVER_ADDR="http://localhost"):
+    def __init__(self,sensor,led_gpio=11,SERVER_ADDR="http://localhost"):
         self.log = []
         self.pwm,self.GPIO = self.create_pwm(led_gpio)
         self.SERVER_ADDR = SERVER_ADDR
