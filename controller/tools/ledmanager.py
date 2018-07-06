@@ -25,7 +25,7 @@ class LEDManager:
         if r.status_code == 200:
             return r.json()
         else:
-            if len(self.data) > 0:
+            if not self.data or len(self.data) > 0:
                 return self.data
             else:
                 return default_data
