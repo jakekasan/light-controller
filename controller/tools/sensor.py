@@ -3,7 +3,7 @@ import asyncio
 import requests
 
 class SensorReader:
-    def __init__(self,gpio,server_addr="http://localhost:8080"):
+    def __init__(self,gpio,server_addr="http://localhost"):
         self.values = []
         self.gpio = gpio
         self.SERVER_ADDR = server_addr
