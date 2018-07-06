@@ -3,8 +3,9 @@ import asyncio
 import requests
 
 class SensorReader:
-    def __init__(self,GPIO):
+    def __init__(self,gpio):
         self.values = []
+        self.gpio = gpio
 
     def get_env_light(self,value_to_get="Visible"):
         bus = smbus.SMBus(1)
@@ -30,5 +31,17 @@ class SensorReader:
         else:
             return(obj[value_to_get])
 
+    def get_latest_corrected_value():
+        latest_value = self.correct_light_value(self.values[-1])
+        return 
+
+    def correct_light_value(self,value):
+        all_light_values = map(lambda x: return x["Visible"],self.values)
+        max_light = max(all_light_values)
+        min_light = min(all_light_values)
+        corrected_value = ((value-min_light)/(max_light-min_light))*max_light+min_light
+        return corrected_value
+
     def update(self):
+        self.values.append(get_env_light)
         pass

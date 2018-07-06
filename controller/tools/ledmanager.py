@@ -1,5 +1,6 @@
 class LEDManager:
-    def __init__(self,led_gpio):
+    def __init__(self,led_gpio,sensor):
+        self.log = []
         pass
 
     def extrapolate(data,env_point):
@@ -12,4 +13,10 @@ class LEDManager:
         lower = [x for x in lower if x["env_brightness"] == max([i["env_brightness"] for i in lower])][0]
         higher = [x for x in higher if x["env_brightness"] == min([i["env_brightness"] for i in higher])][0]
 
-    def 
+    def update(self):
+        # get light value from sensor
+        current_light_value = sensor.get_latest_corrected_value()
+
+        # adjust light value to between 0 and 100
+
+        # adjust LED power accordingly
