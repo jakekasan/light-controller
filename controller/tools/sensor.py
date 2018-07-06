@@ -10,7 +10,7 @@ class Sensor:
 
     def getMaxMin(self):
         r = requests.get(self.SERVER_ADDR+"/data/status")
-        if r.status == 200:
+        if r.status_code == 200:
             status = r.json()
             return status["max"],status["min"]
         else:
