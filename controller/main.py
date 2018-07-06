@@ -10,7 +10,7 @@ led_gpio = 14
 
 def main():
     # initialize
-    sensor = Sensor()
+    sensor = Sensor(server_addr="http://localhost")
     led = LEDManager(sensor,led_gpio)
 
     # main function loop

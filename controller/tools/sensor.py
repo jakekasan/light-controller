@@ -9,9 +9,12 @@ class Sensor:
         self.max,self.min = self.getMaxMin()
 
     def getMaxMin(self):
-        r = requests.get(self.SERVER_ADDR+"/data/dtatus")
-        status = r.json()
-        return status["max"],status["min"]
+        r = requests.get(self.SERVER_ADDR+"/data/status")
+        if r.status == 200:
+            status = r.json()
+            return status["max"],status["min"]
+        else:
+            return 101,99
 
     def newStatus(self,current):
         if current < self.min:
