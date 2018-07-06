@@ -3,7 +3,7 @@ import asyncio
 import requests
 
 class SensorReader:
-    def __init__(self,gpio):
+    def __init__(self,gpio,server_addr="http://localhost:6666"):
         self.values = []
         self.gpio = gpio
 
@@ -23,9 +23,8 @@ class SensorReader:
         }
 
         # send data to server
-
-        requests.post()
-        
+        #requests.post(self.SERVER_ADDR,data=obj)
+        return obj
         if value_to_get not in obj.keys():
             return(obj)
         else:
@@ -43,5 +42,5 @@ class SensorReader:
         return corrected_value
 
     def update(self):
-        self.values.append(get_env_light)
+        self.values.append(get_env_light())
         pass
