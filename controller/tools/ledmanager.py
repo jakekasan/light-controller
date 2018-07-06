@@ -6,6 +6,7 @@ class LEDManager:
         self.log = []
         self.pwm,self.GPIO = self.create_pwm(led_gpio)
         self.SERVER_ADDR = SERVER_ADDR
+        self.data = []
         self.data = self.get_data_from_server()
 
     def extrapolate(data,env_point):
@@ -25,7 +26,7 @@ class LEDManager:
         if r.status_code == 200:
             return r.json()
         else:
-            if not self.data or len(self.data) > 0:
+            if len(self.data) > 0:
                 return self.data
             else:
                 return default_data
