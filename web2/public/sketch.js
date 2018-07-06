@@ -7,10 +7,12 @@ const sizeOfBoxHor = myWidth*0.85;
 const paddingVert = myHeight*0.075;
 const paddingHor = myWidth*0.075; 
 
+
+const _addr = window.location.hostname;
 var pointSelectedIndex = -1;
 
 
-fetch("http://localhost:8080/data").then(res => res.json()).then(json => dataSetter(json));
+fetch(_addr + "/data").then(res => res.json()).then(json => dataSetter(json));
 
 function dataSetter(newData){
   data = newData;//sortData(newData);
@@ -80,7 +82,7 @@ function mouseReleased(){
   if (pointSelectedIndex > -1){
     data[pointSelectedIndex] = newPoint;
     pointSelectedIndex = -1;
-    fetch("http://localhost:8080/data",{
+    fetch(_addr + "/data",{
       method:"POST",
       mode:"cors",
       cache:"no-cache",
