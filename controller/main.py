@@ -6,8 +6,9 @@ led_gpio = 14
 
 
 def main():
+    # initialize
     sensor = Sensor()
-    led = LEDManager(sensor)
+    led = LEDManager(led_gpio,sensor)
 
     # main function loop
 

@@ -1,22 +1,76 @@
+import requests
+import RPi.GPIO as GPIO
+
 class LEDManager:
     def __init__(self,led_gpio,sensor):
         self.log = []
+        self.pwm,self.GPIO = create_pwm(led_gpio)
+        self.SERVER_ADDR = SERVER_ADDR
+        self.data = self.get_data_from_server()
         pass
 
     def extrapolate(data,env_point):
-        lower = [x for x in data if x["env_brightness"] <= env_point]
-        higher = [x for x in data if x["env_brightness"] > env_point]
+        lower = [x for x in data if x["env"] <= env_point]
+        higher = [x for x in data if x["env"] > env_point]
         if lower == []:
             return(0)
         if higher == []:
-            return(max([x["led_brightness"] for x in data]))
-        lower = [x for x in lower if x["env_brightness"] == max([i["env_brightness"] for i in lower])][0]
-        higher = [x for x in higher if x["env_brightness"] == min([i["env_brightness"] for i in higher])][0]
+            return(max([x["led"] for x in data]))
+        lower = [x for x in lower if x["env"] == max([i["env"] for i in lower])][0]
+        higher = [x for x in higher if x["env"] == min([i["env"] for i in higher])][0]
+        return (env-lower["env"])/(higher["env"]-lower["env"])*(higher["led"]-lower["led"])+lower["led"]
+
+
+    def get_data_from_server(self):
+        r = requests.get(self.SERVER_ADDR+"/data")
+        if r.response_code == 200:
+            return r.json()
+        else:
+            return default_data
+
+    def create_pwm(self):
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(led_id,GPIO.OUT)
+        GPIO.output(led_id,GPIO.HIGH)
+        pwm = GPIO.PWM(led_id,1000)
+        pwm.start(0)
+        return(pwm,GPIO)
+
+
+    def set_led_level(self,value):
+        self.pwm.changeDutyCycle(value)
+        
 
     def update(self):
+        # get new data from server
+        
+
         # get light value from sensor
         current_light_value = sensor.get_latest_corrected_value()
 
-        # adjust light value to between 0 and 100
-
         # adjust LED power accordingly
+
+        current_led_value = self.extrapolate(self.data,current_light_value)
+
+default_data = [
+    {
+        "env":100,
+        "led":100
+    },
+    {
+        "env":75,
+        "led":75
+    },
+    {
+        "env":50,
+        "led":50
+    },
+    {
+        "env":25,
+        "led":25
+    },
+    {
+        "env":0,
+        "led":0
+    }
+]
