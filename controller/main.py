@@ -1,6 +1,7 @@
 import requests
 import csv
-from tools import Sensor,LEDManager
+from tools.sensor import Sensor
+from tools.ledmanager import LEDManager
 
 led_gpio = 14
 
