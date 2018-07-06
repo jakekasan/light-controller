@@ -2,7 +2,7 @@ import requests
 import RPi.GPIO as GPIO
 
 class LEDManager:
-    def __init__(self,led_gpio,sensor,SERVER_ADDR="http://localhost"):
+    def __init__(self,led_gpio=14,sensor,SERVER_ADDR="http://localhost"):
         self.log = []
         self.pwm,self.GPIO = self.create_pwm(led_gpio)
         self.SERVER_ADDR = SERVER_ADDR
@@ -56,6 +56,10 @@ class LEDManager:
         current_led_value = self.extrapolate(self.data,current_light_value)
 
         self.set_led_level(current_led_value)
+
+
+    def cleanup(self):
+        self.GPIO.cleanup()
 
 default_data = [
     {

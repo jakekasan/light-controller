@@ -3,9 +3,8 @@ import asyncio
 import requests
 
 class Sensor:
-    def __init__(self,gpio=11,server_addr="http://localhost"):
+    def __init__(self,server_addr="http://localhost"):
         self.values = []
-        self.gpio = gpio
         self.SERVER_ADDR = server_addr
         self.max,self.min = self.getMaxMin()
 
@@ -68,3 +67,6 @@ class Sensor:
     def update(self):
         self.values.append(get_env_light())
         self.newStatus(self.values[-1])
+
+    def cleanup(self):
+        return

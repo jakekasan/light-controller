@@ -12,10 +12,16 @@ def main():
     led = LEDManager(led_gpio,sensor)
 
     # main function loop
-
-    while True:
-        sensor.update()
-        led.update()
+    try:
+        while True:
+            sensor.update()
+            led.update()
+    except e:
+        print(e)
+    finally:
+        led.cleanup()
+        sensor.cleanup()
+        
 
 if "__main__" == __name__:
-    pass
+    main()
