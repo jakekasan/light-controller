@@ -2,12 +2,11 @@ import requests
 import RPi.GPIO as GPIO
 
 class LEDManager:
-    def __init__(self,led_gpio=14,sensor,SERVER_ADDR="http://localhost"):
+    def __init__(self,sensor,led_gpio=14,SERVER_ADDR="http://localhost"):
         self.log = []
         self.pwm,self.GPIO = self.create_pwm(led_gpio)
         self.SERVER_ADDR = SERVER_ADDR
         self.data = self.get_data_from_server()
-        pass
 
     def extrapolate(data,env_point):
         lower = [x for x in data if x["env"] <= env_point]
