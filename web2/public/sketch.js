@@ -12,7 +12,7 @@ const _addr = window.location.hostname;
 var pointSelectedIndex = -1;
 
 
-fetch(_addr + "/data").then(res => res.json()).then(json => dataSetter(json));
+fetch("/data").then(res => res.json()).then(json => dataSetter(json));
 
 function dataSetter(newData){
   data = newData;//sortData(newData);
@@ -82,7 +82,7 @@ function mouseReleased(){
   if (pointSelectedIndex > -1){
     data[pointSelectedIndex] = newPoint;
     pointSelectedIndex = -1;
-    fetch(_addr + "/data",{
+    fetch("/data",{
       method:"POST",
       mode:"cors",
       cache:"no-cache",
