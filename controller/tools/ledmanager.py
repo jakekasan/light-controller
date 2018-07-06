@@ -2,9 +2,9 @@ import requests
 import RPi.GPIO as GPIO
 
 class LEDManager:
-    def __init__(self,led_gpio,sensor):
+    def __init__(self,led_gpio,sensor,SERVER_ADDR="http://localhost:6666"):
         self.log = []
-        self.pwm,self.GPIO = create_pwm(led_gpio)
+        self.pwm,self.GPIO = self.create_pwm(led_gpio)
         self.SERVER_ADDR = SERVER_ADDR
         self.data = self.get_data_from_server()
         pass
@@ -26,9 +26,12 @@ class LEDManager:
         if r.response_code == 200:
             return r.json()
         else:
-            return default_data
+            if len(self.data) > 0:
+                return self.data
+            else:
+                return default_data
 
-    def create_pwm(self):
+    def create_pwm(self,led_id):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(led_id,GPIO.OUT)
         GPIO.output(led_id,GPIO.HIGH)
@@ -38,12 +41,12 @@ class LEDManager:
 
 
     def set_led_level(self,value):
-        self.pwm.changeDutyCycle(value)
+        self.pwm.ChangeDutyCycle(value)
         
 
     def update(self):
         # get new data from server
-        
+        self.data = get_data_from_server()
 
         # get light value from sensor
         current_light_value = sensor.get_latest_corrected_value()
@@ -51,6 +54,8 @@ class LEDManager:
         # adjust LED power accordingly
 
         current_led_value = self.extrapolate(self.data,current_light_value)
+
+        self.set_led_level(current_led_value)
 
 default_data = [
     {
