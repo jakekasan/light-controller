@@ -1,3 +1,5 @@
+#!/bin/usr/env python3
+
 import requests
 import csv
 from tools.sensor import Sensor
@@ -9,7 +11,7 @@ led_gpio = 14
 def main():
     # initialize
     sensor = Sensor()
-    led = LEDManager(led_gpio,sensor)
+    led = LEDManager(sensor,led_gpio)
 
     # main function loop
     try:
