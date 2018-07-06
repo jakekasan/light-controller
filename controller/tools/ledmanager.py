@@ -22,7 +22,7 @@ class LEDManager:
 
     def get_data_from_server(self):
         r = requests.get(self.SERVER_ADDR+"/data")
-        if r.response_code == 200:
+        if r.status_code == 200:
             return r.json()
         else:
             if len(self.data) > 0:
