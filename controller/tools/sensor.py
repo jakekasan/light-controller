@@ -2,8 +2,8 @@ import smbus
 import asyncio
 import requests
 
-class SensorReader:
-    def __init__(self,gpio,server_addr="http://localhost"):
+class Sensor:
+    def __init__(self,gpio=11,server_addr="http://localhost"):
         self.values = []
         self.gpio = gpio
         self.SERVER_ADDR = server_addr
