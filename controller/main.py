@@ -2,6 +2,7 @@
 
 import requests
 import csv
+import sys
 from tools.sensor import Sensor
 from tools.ledmanager import LEDManager
 
@@ -22,7 +23,12 @@ def main():
             sensor.update()
             led.update()
     except:
-        print("Encountered Problem")
+        mytype,value,traceback = sys.exc_info()
+        print(mytype)
+        print(value)
+        print(traceback)
+        
+
     finally:
         led.cleanup()
         sensor.cleanup()
