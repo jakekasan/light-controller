@@ -1,5 +1,6 @@
 import requests
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
+from .test import Pwm,GPIO
 
 class LEDManager:
     def __init__(self,sensor,led_gpio=11,SERVER_ADDR="http://localhost"):
@@ -22,22 +23,25 @@ class LEDManager:
 
 
     def get_data_from_server(self):
-        r = requests.get(self.SERVER_ADDR+"/data")
-        if r.status_code == 200:
-            return r.json()
-        else:
+        try:
+            r = requests.get(self.SERVER_ADDR+"/data")
+            if r.status_code == 200:
+                return r.json()
+        except:
             if len(self.data) > 0:
                 return self.data
             else:
                 return default_data
 
     def create_pwm(self,led_id):
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(led_id,GPIO.OUT)
-        GPIO.output(led_id,GPIO.HIGH)
-        pwm = GPIO.PWM(led_id,1000)
-        pwm.start(0)
-        return(pwm,GPIO)
+        gpio = GPIO()
+        pwm = Pwm(led_id,1000,verbose=True)
+        # GPIO.setmode(GPIO.BOARD)
+        # GPIO.setup(led_id,GPIO.OUT)
+        # GPIO.output(led_id,GPIO.HIGH)
+        # pwm = GPIO.PWM(led_id,1000)
+        # pwm.start(0)
+        return(pwm,gpio)
 
 
     def set_led_level(self,value):

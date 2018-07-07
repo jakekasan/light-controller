@@ -9,8 +9,11 @@ led_gpio = 11
 
 
 def main():
+    # set server address
+    SERVER_ADDR = "http://localhost:8080"
+
     # initialize
-    sensor = Sensor(server_addr="http://localhost")
+    sensor = Sensor(server_addr=SERVER_ADDR)
     led = LEDManager(sensor,led_gpio)
 
     # main function loop
