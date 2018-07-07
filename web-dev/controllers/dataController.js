@@ -34,9 +34,9 @@ module.exports = function(app){
   });
 
   app.get('/data/json', function(request,response){
-    console.log(request.body);
-    response.send(data);
-    //response.json(data);
+    console.log("JSON requested");
+    //response.send(data);
+    response.json(data);
   });
 
 };

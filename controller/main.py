@@ -18,20 +18,24 @@ def main():
     led = LEDManager(sensor,led_gpio)
 
     # main function loop
-    try:
-        while True:
-            sensor.update()
-            led.update()
-    except:
-        mytype,value,traceback = sys.exc_info()
-        print(mytype)
-        print(value)
-        print(traceback)
+
+    while True:
+        sensor.update()
+        led.update()
+    # try:
+    #     while True:
+    #         sensor.update()
+    #         led.update()
+    # except:
+    #     mytype,value,traceback = sys.exc_info()
+    #     print(mytype)
+    #     print(value)
+    #     print(traceback)
         
 
-    finally:
-        led.cleanup()
-        sensor.cleanup()
+    # finally:
+    #     led.cleanup()
+    #     sensor.cleanup()
         
 
 if "__main__" == __name__:

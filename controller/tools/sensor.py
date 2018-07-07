@@ -21,6 +21,9 @@ class Sensor:
 
     def newStatus(self,current):
         if current < self.min:
+            print("newStatus: {} is less than {}".format(current,self.min))
+            if current == self.max:
+                current -= 10
             data = {
                 "max":self.max,
                 "min":current
@@ -31,6 +34,9 @@ class Sensor:
             except:
                 print("Could not send status to server")
         if current > self.max:
+            print("newStatus: {} is more than {}".format(current,self.max))
+            if current == self.min:
+                current += 10
             data = {
                 "max":current,
                 "min":self.min
@@ -69,21 +75,25 @@ class Sensor:
                 "Infrared": max(0,self.values[-1]["Infrared"]+(self.values[-1]["Infrared"]*(random.random()-0.5))),
                 "Visible": max(0,self.values[-1]["Visible"]+(self.values[-1]["Visible"]*(random.random()-0.5)))
             }
+        print("Getting env light")
+        print(obj)
         return obj
 
-    def get_latest_corrected_value():
-        latest_value = self.correct_light_value(self.values[-1])
-        return 
+    def get_latest_corrected_value(self):
+        return self.correct_light_value(self.values[-1]["Visible"])
 
     def correct_light_value(self,value):
+        print("Sensor :: correcting value:",value)
         max_light = self.max
         min_light = self.min
+        print(max_light)
+        print(min_light)
         corrected_value = ((value-min_light)/(max_light-min_light))*max_light+min_light
         return corrected_value
 
     def update(self):
         self.values.append(self.get_env_light())
-        self.newStatus(self.values[-1])
+        self.newStatus(self.values[-1]["Visible"])
 
     def cleanup(self):
         return
